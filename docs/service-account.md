@@ -10,7 +10,7 @@ This action requires a service account to authenticate with Firebase. The easies
 1. Click the "+ CREATE SERVICE ACCOUNT" button
 1. Give the service account a name, id, description. We recommend something like `github-action-<my repository name>`
 1. At the "Grant this service account access to project" step, choose the following [roles](https://firebase.google.com/docs/projects/iam/roles-predefined-product) that the service account will need to deploy on your behalf:
-  TODO: List out required roles!
+   TODO: List out required roles!
 1. Finish the service account creation flow
 
 ### 2. Get that service account's key and add it to your repository as a secret

@@ -59,7 +59,7 @@ export async function postDeploySuccessComment(
   context: Context,
   result: DeploySuccessResult,
   commit: string,
-  project: string,
+  project: string
 ) {
   const commentInfo = {
     ...context.repo,

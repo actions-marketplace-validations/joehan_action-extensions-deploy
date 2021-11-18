@@ -25,14 +25,8 @@ import { context, getOctokit } from "@actions/github";
 import { existsSync } from "fs";
 import { createCheck } from "./createCheck";
 import { createGacFile } from "./createGACFile";
-import {
-  deploy,
-  ErrorResult,
-  interpretDeployResult,
-} from "./deploy";
-import {
-  postDeploySuccessComment,
-} from "./postOrUpdateComment";
+import { deploy, ErrorResult, interpretDeployResult } from "./deploy";
+import { postDeploySuccessComment } from "./postOrUpdateComment";
 
 // Inputs defined in action.yml
 const expires = getInput("expires");
