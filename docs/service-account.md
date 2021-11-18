@@ -1,6 +1,6 @@
 # Setting up the service account
 
-This action requires a service account to authenticate with Firebase Hosting. The easiest way to set up the service account is to use the Firebase CLI with the `firebase init hosting:github` if that doesn't work for you, you can configure it manually.
+This action requires a service account to authenticate with Firebase. The easiest way to set up the service account is to configure it manually.
 
 ## Manually configure the service account
 
@@ -10,10 +10,7 @@ This action requires a service account to authenticate with Firebase Hosting. Th
 1. Click the "+ CREATE SERVICE ACCOUNT" button
 1. Give the service account a name, id, description. We recommend something like `github-action-<my repository name>`
 1. At the "Grant this service account access to project" step, choose the following [roles](https://firebase.google.com/docs/projects/iam/roles-predefined-product) that the service account will need to deploy on your behalf:
-   - **Firebase Authentication Admin** (Required to add preview URLs to Auth authorized domains)
-   - **Firebase Hosting Admin** (Required to deploy preview channels)
-   - **Cloud Run Viewer** (Required for projects that [use Hosting rewrites to Cloud Run or Cloud Functions](https://firebase.google.com/docs/hosting/serverless-overview))
-   - **API Keys Viewer** (Required for CLI deploys)
+  TODO: List out required roles!
 1. Finish the service account creation flow
 
 ### 2. Get that service account's key and add it to your repository as a secret

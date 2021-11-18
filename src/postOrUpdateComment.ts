@@ -18,14 +18,15 @@ import { endGroup, startGroup } from "@actions/core";
 import type { GitHub } from "@actions/github/lib/utils";
 import { Context } from "@actions/github/lib/context";
 import {
-  ChannelSuccessResult,
-  interpretChannelDeployResult,
+  DeploySuccessResult,
+  interpretDeployResult,
   ErrorResult,
 } from "./deploy";
 import { createDeploySignature } from "./hash";
 
+// TODO: Update GH link
 const BOT_SIGNATURE =
-  "<sub>🔥 via [Firebase Hosting GitHub Action](https://github.com/marketplace/actions/deploy-to-firebase-hosting) 🌎</sub>";
+  "<sub>🔥 via [Firebase Extensions GitHub Action](https://github.com/marketplace/actions/deploy-to-firebase-hosting) 🌎</sub>";
 
 export function createBotCommentIdentifier(signature: string) {
   return function isCommentByBot(comment): boolean {
@@ -33,48 +34,39 @@ export function createBotCommentIdentifier(signature: string) {
   };
 }
 
-export function getURLsMarkdownFromChannelDeployResult(
-  result: ChannelSuccessResult
-): string {
-  const { urls } = interpretChannelDeployResult(result);
-
-  return urls.length === 1
-    ? `[${urls[0]}](${urls[0]})`
-    : urls.map((url) => `- [${url}](${url})`).join("\n");
-}
-
-export function getChannelDeploySuccessComment(
-  result: ChannelSuccessResult,
-  commit: string
+export function getDeploySuccessComment(
+  result: DeploySuccessResult,
+  commit: string,
+  project: string
 ) {
   const deploySignature = createDeploySignature(result);
-  const urlList = getURLsMarkdownFromChannelDeployResult(result);
-  const { expireTime } = interpretChannelDeployResult(result);
+  const { instanceIds, consoleUrl } = interpretDeployResult(result);
 
   return `
-Visit the preview URL for this PR (updated for commit ${commit}):
+Deployed Extension instances to ${project} (updated for commit ${commit}):
 
-${urlList}
+${instanceIds.join("\n")}
 
-<sub>(expires ${new Date(expireTime).toUTCString()})</sub>
+View your deployed extensions at ${consoleUrl}
 
 ${BOT_SIGNATURE}
 
 <sub>Sign: ${deploySignature}</sub>`.trim();
 }
 
-export async function postChannelSuccessComment(
+export async function postDeploySuccessComment(
   github: InstanceType<typeof GitHub>,
   context: Context,
-  result: ChannelSuccessResult,
-  commit: string
+  result: DeploySuccessResult,
+  commit: string,
+  project: string,
 ) {
   const commentInfo = {
     ...context.repo,
     issue_number: context.issue.number,
   };
 
-  const commentMarkdown = getChannelDeploySuccessComment(result, commit);
+  const commentMarkdown = getDeploySuccessComment(result, commit, project);
 
   const comment = {
     ...commentInfo,

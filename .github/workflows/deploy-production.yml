@@ -1,4 +1,4 @@
-name: Deploy Production
+name: Deploy Extensions to Production
 
 on:
   push:

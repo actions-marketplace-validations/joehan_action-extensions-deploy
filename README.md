@@ -29,7 +29,7 @@ firebase init hosting:github
 Add a workflow (`.github/workflows/deploy-preview.yml`):
 
 ```yaml
-name: Deploy to Preview Channel
+name: Deploy to Environment
 
 on:
   pull_request:
@@ -52,12 +52,12 @@ jobs:
           projectId: your-Firebase-project-ID
 ```
 
-### Deploy to your live channel on merge
+### Deploy to your prod project on merge
 
 Add a workflow (`.github/workflows/deploy-prod.yml`):
 
 ```yaml
-name: Deploy to Live Channel
+name: Deploy to Prod
 
 on:
   push:

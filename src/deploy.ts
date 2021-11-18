@@ -16,11 +16,8 @@
 
 import { exec } from "@actions/exec";
 
-export type SiteDeploy = {
-  site: string;
-  target?: string;
-  url: string;
-  expireTime: string;
+export type InstanceDeploy = {
+  instanceId: string,
 };
 
 export type ErrorResult = {
@@ -28,41 +25,25 @@ export type ErrorResult = {
   error: string;
 };
 
-export type ChannelSuccessResult = {
+export type DeploySuccessResult = {
   status: "success";
-  result: { [key: string]: SiteDeploy };
-};
-
-export type ProductionSuccessResult = {
-  status: "success";
-  result: {
-    hosting: string | string[];
-  };
+  result: { [key: string]: InstanceDeploy };
 };
 
 export type DeployConfig = {
-  projectId: string;
-  expires: string;
-  channelId: string;
-  target?: string;
+  project: string;
 };
 
-export type ProductionDeployConfig = {
-  projectId: string;
-  target?: string;
-};
 
-export function interpretChannelDeployResult(
-  deployResult: ChannelSuccessResult
-): { expireTime: string; urls: string[] } {
-  const allSiteResults = Object.values(deployResult.result);
+export function interpretDeployResult(
+  deployResult: DeploySuccessResult
+): { instanceIds: string[]; consoleUrl: string } {
+  // TODO: Implement this
 
-  const expireTime = allSiteResults[0].expireTime;
-  const urls = allSiteResults.map((siteResult) => siteResult.url);
 
   return {
-    expireTime,
-    urls,
+    instanceIds : [],
+    consoleUrl: "https://firebase.com",
   };
 }
 
@@ -92,7 +73,7 @@ async function execWithCredentials(
         },
         env: {
           ...process.env,
-          FIREBASE_DEPLOY_AGENT: "action-hosting-deploy",
+          FIREBASE_DEPLOY_AGENT: "action-extensions-deploy", // TODO: Check if I need to do anything to track this on the CLI end?
           GOOGLE_APPLICATION_CREDENTIALS: gacFilename, // the CLI will automatically authenticate with this env variable set
         },
       }
@@ -116,44 +97,20 @@ async function execWithCredentials(
     : ""; // output from the CLI
 }
 
-export async function deployPreview(
-  gacFilename: string,
+export async function deploy(
+  gacFilename,
   deployConfig: DeployConfig
 ) {
-  const { projectId, channelId, target, expires } = deployConfig;
+  const { project } = deployConfig;
 
   const deploymentText = await execWithCredentials(
-    [
-      "hosting:channel:deploy",
-      channelId,
-      ...(target ? ["--only", target] : []),
-      ...(expires ? ["--expires", expires] : []),
-    ],
-    projectId,
-    gacFilename
-  );
-
-  const deploymentResult = JSON.parse(deploymentText.trim()) as
-    | ChannelSuccessResult
-    | ErrorResult;
-
-  return deploymentResult;
-}
-
-export async function deployProductionSite(
-  gacFilename,
-  productionDeployConfig: ProductionDeployConfig
-) {
-  const { projectId, target } = productionDeployConfig;
-
-  const deploymentText = await execWithCredentials(
-    ["deploy", "--only", `hosting${target ? ":" + target : ""}`],
-    projectId,
+    ["deploy", "--only", "extensions", "--force"],
+    project,
     gacFilename
   );
 
   const deploymentResult = JSON.parse(deploymentText) as
-    | ProductionSuccessResult
+    | DeploySuccessResult
     | ErrorResult;
 
   return deploymentResult;
