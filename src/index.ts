@@ -29,17 +29,13 @@ import { deploy, ErrorResult, interpretDeployResult } from "./deploy";
 import { postDeploySuccessComment } from "./postOrUpdateComment";
 
 // Inputs defined in action.yml
-const expires = getInput("expires");
-const projectId = getInput("projectId");
+const projectId = getInput("project");
 const googleApplicationCredentials = getInput("firebaseServiceAccount", {
   required: true,
 });
-const configuredChannelId = getInput("channelId");
-const isProductionDeploy = configuredChannelId === "live";
 const token = process.env.GITHUB_TOKEN || getInput("repoToken");
 const octokit = token ? getOctokit(token) : undefined;
 const entryPoint = getInput("entryPoint");
-const target = getInput("target");
 
 async function run() {
   const isPullRequest = !!context.payload.pull_request;
