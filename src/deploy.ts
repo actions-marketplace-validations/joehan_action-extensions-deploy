@@ -17,7 +17,7 @@
 import { exec } from "@actions/exec";
 
 export type InstanceDeploy = {
-  instanceId: string,
+  instanceId: string;
 };
 
 export type ErrorResult = {
@@ -34,15 +34,13 @@ export type DeployConfig = {
   project: string;
 };
 
-
 export function interpretDeployResult(
   deployResult: DeploySuccessResult
 ): { instanceIds: string[]; consoleUrl: string } {
   // TODO: Implement this
 
-
   return {
-    instanceIds : [],
+    instanceIds: [],
     consoleUrl: "https://firebase.com",
   };
 }
@@ -97,10 +95,7 @@ async function execWithCredentials(
     : ""; // output from the CLI
 }
 
-export async function deploy(
-  gacFilename,
-  deployConfig: DeployConfig
-) {
+export async function deploy(gacFilename, deployConfig: DeployConfig) {
   const { project } = deployConfig;
 
   const deploymentText = await execWithCredentials(
@@ -109,7 +104,7 @@ export async function deploy(
     gacFilename
   );
 
-  console.log(deploymentText)
+  console.log(deploymentText);
 
   const deploymentResult = JSON.parse(deploymentText) as
     | DeploySuccessResult
