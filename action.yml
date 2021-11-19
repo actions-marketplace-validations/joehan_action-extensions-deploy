@@ -28,9 +28,9 @@ inputs:
   firebaseServiceAccount:
     description: "Firebase service account JSON"
     required: true
-  projectId:
+  project:
     description:
-      "The project ID, alias, or  to deploy to. If you leave this blank, make sure you check in
+      "The project ID or alias to deploy to. If you leave this blank, make sure you check in
       a .firebaserc file"
     required: false
   entryPoint:
