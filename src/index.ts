@@ -82,7 +82,7 @@ async function run() {
     }
     endGroup();
 
-    const url = `https://firebase.com/project/${projectId}/extensions`;
+    const url = `https://console.firebase.google.com/projects/${projectId}/extensions`;
     await finish({
       details_url: url,
       conclusion: "success",
